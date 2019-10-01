@@ -30,7 +30,7 @@ function determine_os {
 		echo -e "${GREEN}[+]${NC} Manjaro distribution detected."		
 		PAM_VERSION=$(pacman -Ss | grep -w "core/pam" | sed -nre 's/^[^1]*(([0-9]+\.)*[0-9]+).*/\1/p')
 	elif uname | grep -q "Darwin"; then
-		echo -e "${RED}[-]${NC} proprietary half-stolen shit detected."
+		echo -e "${RED}[-]${NC} Mac OS X detected."
 		## todo
 	else		
 		echo -e "${RED}[-]${NC} unknown distribution, work in progress."
